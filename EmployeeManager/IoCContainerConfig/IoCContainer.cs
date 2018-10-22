@@ -4,11 +4,7 @@ using EmployeeManager.Controllers;
 using EmployeeManager.Databases;
 using EmployeeManager.Repositories;
 using EmployeeManager.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.Http;
 
 namespace EmployeeManager.IoCContainerConfig

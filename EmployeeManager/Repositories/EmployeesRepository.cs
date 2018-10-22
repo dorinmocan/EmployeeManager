@@ -1,9 +1,7 @@
 ﻿using EmployeeManager.Databases;
 using EmployeeManager.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace EmployeeManager.Repositories
 {
@@ -18,28 +16,58 @@ namespace EmployeeManager.Repositories
 
         public IEnumerable<Employee> Get()
         {
-            return _employeeDbContext.Employees;
+            IEnumerable<Employee> employees = _employeeDbContext.Employees;
+
+            foreach (var employee in employees)
+            {
+                GetEmployeeSkills(employee);
+            }
+
+            return employees;
         }
 
         public Employee Get(int id)
         {
-            return _employeeDbContext.Employees.SingleOrDefault(e => e.Id == id);
+            Employee employee = _employeeDbContext.Employees.SingleOrDefault(e => e.Id == id);
+
+            GetEmployeeSkills(employee);
+
+            return employee;
         }
 
         public void Add(Employee employee)
         {
+            if (employee.Skills != null)
+            {
+                foreach (var skill in employee.Skills)
+                {
+                    if (skill.Field != null)
+                    {
+                        _employeeDbContext.Fields.Add(skill.Field);
+                    }
+
+                    if (skill.Title != null)
+                    {
+                        _employeeDbContext.Titles.Add(skill.Title);
+                    }
+                }
+
+                _employeeDbContext.Skills.AddRange(employee.Skills);
+            }
+
             _employeeDbContext.Employees.Add(employee);
             Commit();
         }
 
         public void Remove(int id)
         {
-            Employee dbEmployee = _employeeDbContext.Employees.SingleOrDefault(e => e.Id == id);
+            Employee employee = _employeeDbContext.Employees.SingleOrDefault(e => e.Id == id);
 
-            if (dbEmployee != null)
+            if (employee != null)
             {
-                _employeeDbContext.Skills.RemoveRange(dbEmployee.Skills);
-                _employeeDbContext.Employees.Remove(dbEmployee);
+                GetEmployeeSkills(employee);
+                _employeeDbContext.Skills.RemoveRange(employee.Skills);
+                _employeeDbContext.Employees.Remove(employee);
                 Commit();
             }
         }
@@ -54,6 +82,7 @@ namespace EmployeeManager.Repositories
                 dbEmployee.Salary = employee.Salary;
                 _employeeDbContext.Skills.RemoveRange(dbEmployee.Skills);
                 _employeeDbContext.Skills.AddRange(employee.Skills);
+                dbEmployee.Skills = employee.Skills;
                 Commit();
             }
         }
@@ -61,6 +90,16 @@ namespace EmployeeManager.Repositories
         private void Commit()
         {
             _employeeDbContext.SaveChanges();
+        }
+
+        private void GetEmployeeSkills(Employee employee)
+        {
+            var skills = _employeeDbContext.Skills.Where(s => s.Employee.Id == employee.Id);
+
+            foreach (var skill in skills)
+            {
+                employee.Skills.Add(skill);
+            }
         }
     }
 }

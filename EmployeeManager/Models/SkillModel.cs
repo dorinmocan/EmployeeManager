@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace EmployeeManager.Models
+﻿namespace EmployeeManager.Models
 {
     public class SkillModel
     {
         public int Id { get; set; }
 
-        public virtual FieldModel Field { get; set; }
+        public FieldModel Field { get; set; }
 
-        public virtual TitleModel Title { get; set; }
+        public TitleModel Title { get; set; }
 
-        public DateTime Experience { get; set; }
+        public byte YearsOfExperience { get; set; }
+
+        public EmployeeModel Employee { get; set; }
     }
 }

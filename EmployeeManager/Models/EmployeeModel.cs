@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace EmployeeManager.Models
 {
@@ -13,6 +10,11 @@ namespace EmployeeManager.Models
 
         public decimal Salary { get; set; }
 
-        public virtual List<SkillModel> Skills { get; set; }
+        public List<SkillModel> Skills { get; set; }
+
+        public EmployeeModel()
+        {
+            Skills = new List<SkillModel>();
+        }
     }
 }

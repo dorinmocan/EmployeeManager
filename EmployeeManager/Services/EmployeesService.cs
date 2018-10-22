@@ -2,10 +2,7 @@
 using EmployeeManager.Extensions;
 using EmployeeManager.Models;
 using EmployeeManager.Repositories;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace EmployeeManager.Services
 {

@@ -1,10 +1,6 @@
 ﻿using EmployeeManager.Entities;
-using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
-using System.Linq;
-using System.Web;
 
 namespace EmployeeManager.Databases
 {
@@ -13,18 +9,31 @@ namespace EmployeeManager.Databases
         public EmployeeDbContext() : base(ConfigurationManager.ConnectionStrings["EmployeesDbContext"].ConnectionString)
         {
         }
-        
-        public DbSet<Employee> Employees { get; set; }
-
-        public DbSet<Skill> Skills { get; set; }
 
         public DbSet<Field> Fields { get; set; }
 
         public DbSet<Title> Titles { get; set; }
 
-        protected override void OnModelCreating(DbModelBuilder dbModelBuilder)
+        public DbSet<Skill> Skills { get; set; }
+
+        public DbSet<Employee> Employees { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            dbModelBuilder.Entity<Employee>().HasMany(e => e.Skills);
+            modelBuilder.Entity<Field>()
+            .HasMany<Skill>(f => f.Skills)
+            .WithRequired(s => s.Field)
+            .HasForeignKey<int>(s => s.FieldId);
+
+            modelBuilder.Entity<Title>()
+            .HasMany<Skill>(t => t.Skills)
+            .WithRequired(s => s.Title)
+            .HasForeignKey<int>(s => s.TitleId);
+
+            modelBuilder.Entity<Employee>()
+            .HasMany<Skill>(e => e.Skills)
+            .WithRequired(s => s.Employee)
+            .HasForeignKey<int>(s => s.EmployeeId);
         }
     }
 }

@@ -1,9 +1,6 @@
 ﻿using EmployeeManager.Entities;
 using EmployeeManager.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace EmployeeManager.Extensions
 {
@@ -13,9 +10,12 @@ namespace EmployeeManager.Extensions
         {
             List<SkillModel> modelSkills = new List<SkillModel>();
 
-            foreach (var skill in employee.Skills)
+            if (employee.Skills != null)
             {
-                modelSkills.Add(skill.ToModel());
+                foreach (var skill in employee.Skills)
+                {
+                    modelSkills.Add(skill.ToModel());
+                }
             }
 
             return new EmployeeModel
@@ -31,9 +31,12 @@ namespace EmployeeManager.Extensions
         {
             List<Skill> skills = new List<Skill>();
 
-            foreach (var skill in modelEmployee.Skills)
+            if (modelEmployee.Skills != null)
             {
-                skills.Add(skill.ToEntity());
+                foreach (var skill in modelEmployee.Skills)
+                {
+                    skills.Add(skill.ToEntity());
+                }
             }
 
             return new Employee
